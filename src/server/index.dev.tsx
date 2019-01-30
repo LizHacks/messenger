@@ -3,7 +3,7 @@ import { addHook } from 'pirates';
 // Convert image file imports into empty strings
 addHook(
   (code: string, filename: string) => '',
-  { exts: [ '.jpg', '.jpeg', '.png', '.gif', '.png' ], matcher: () => true }
+  { exts: [ '.jpg', '.jpeg', '.png', '.gif', '.png' ], matcher: () => true },
 );
 
 import * as Koa from 'koa';
