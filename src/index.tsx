@@ -17,5 +17,5 @@ ReactDOM.render(
   </BrowserRouter>
 , container);
 
-import "react-bulma-components/lib/index.sass";
+import "bulma/bulma.sass";
 import "./styles/style.less";

@@ -20,7 +20,7 @@ module.exports = {
   devtool: devMode ? 'cheap-module-source-map' : 'source-map',
 
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.json', '.less']
+    extensions: ['.ts', '.tsx', '.js', '.json', '.less', '.sass']
   },
 
   module: {

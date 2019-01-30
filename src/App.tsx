@@ -7,8 +7,6 @@ import { hot } from 'react-hot-loader';
 import Home from './pages/Home';
 import Auth from './pages/Auth';
 
-import 'react-bulma-components/dist/react-bulma-components.min.css';
-
 export const routes = [
   { path: '/', exact: true, component: Home },
   { path: '/auth', component: Auth },
