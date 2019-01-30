@@ -1,0 +1,27 @@
+version: '3'
+services:
+  app:
+    command: /bin/sh -c "npm run start:dev"
+    image: node:10
+    working_dir: /opt
+    ports:
+      - "7175:7175"
+    volumes:
+      - .:/opt:z
+    environment:
+      RABBIT_URI: amqp://guest:guest@rabbit
+      LOG_LEVEL: debug
+    networks:
+      - rabbit
+      - proxy
+      - postgres
+networks:
+  proxy:
+    external:
+      name: services_proxy
+  rabbit:
+    external:
+      name: infra_rabbit
+  postgres:
+    external:
+      name: infra_postgres
