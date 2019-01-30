@@ -17,6 +17,7 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "@repositive/event-store": "^0.1.1",
     "@types/chai": "^4.1.7",
     "@types/enzyme": "^3.1.16",
     "@types/enzyme-adapter-react-16": "^1.0.3",
@@ -40,6 +41,7 @@
     "koa-webpack": "^5.1.1",
     "less": "^3.9.0",
     "node-fetch": "^2.3.0",
+    "pg": "^7.8.0",
     "react": "^16.6.3",
     "react-bulma-components": "^3.0.1-3",
     "react-dom": "^16.6.3",
