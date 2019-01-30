@@ -1,14 +1,24 @@
 import * as React from 'react';
-import { Button } from 'react-bulma-components';
+import { Columns, Button} from 'react-bulma-components';
+import ChatsList from '../components/ChatsList';
 
 export default class Home extends React.PureComponent<any, any> {
-  render() {
+  public render() {
     return (
       <div>
-        <h1>Homepage</h1>
+        <Columns>
+          <Columns.Column>
+            <p>Something</p>
+            <Button>Some button</Button>
+            <ChatsList { chat_names: ['a', 'b']}/>
 
-        <Button color="primary">My Bulma button</Button>
+          </Columns.Column>
+          <Columns.Column>
+            <p className="bd-notification is-info"> Something</p>
+
+          </Columns.Column>
+        </Columns>
       </div>
-    )
+    );
   }
 }

@@ -2,10 +2,12 @@ import * as React from 'react';
 import { Store } from 'redux';
 import { Switch, Route } from 'react-router';
 import { Provider } from 'react-redux';
-import { hot } from 'react-hot-loader'
+import { hot } from 'react-hot-loader';
 
 import Home from './pages/Home';
 import Auth from './pages/Auth';
+
+import 'react-bulma-components/dist/react-bulma-components.min.css';
 
 export const routes = [
   { path: '/', exact: true, component: Home },

@@ -21,7 +21,7 @@ export function init(app: any) {
         <Container>
           <App store={store} />
         </Container>
-      </StaticRouter>
+      </StaticRouter>,
     );
   });
 }
