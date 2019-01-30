@@ -14,19 +14,23 @@ const example_user = {
   user_id: "some-user-id",
   name: "Bobby Beans",
   organisation_id: "some-org-id",
+  organisation: {
+    organisation_id: "some-org-id",
+  },
 };
 // import RepositiveLogo from '../../assets/repositive_logo.svg';
 // tslint:disable-next-line
-const large = require('../../assets/repositive_logo.svg');
+//const large = require('../../assets/repositive_logo.svg');
+//              <img src={large} alt="Repositive" height="100%"/>
 
 class Home extends React.PureComponent<any, any> {
   public render = () => {
     return (
       <div>
-        <Navbar size="small" className="is-fixed-top">
+        <Navbar className="is-fixed-top">
           <Navbar.Brand>
             <Navbar.Item>
-              <img src={large} alt="Repositive" height="100%"/>
+              <strong>Repositive</strong>
             </Navbar.Item>
             <Navbar.Item>
               <strong>Return to CMP</strong>
@@ -42,7 +46,7 @@ class Home extends React.PureComponent<any, any> {
             />
           </Columns.Column>
           <Columns.Column className="is-three-quarters">
-            <ChatViewer conversation={this.props.active_conversation} me={example_user}/>
+            <ChatViewer conversation={this.props.active_conversation} me={example_user as any}/>
           </Columns.Column>
         </Columns>
       </div>

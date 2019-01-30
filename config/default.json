@@ -1,0 +1,26 @@
+{
+  "base_path": "/search2",
+  "iris": {
+    "uri": "amqp://guest:guest@localhost",
+    "namespace": "gnowee2"
+  },
+  "iris_legacy": {
+    "uri": "amqp://guest:guest@localhost",
+    "namespace": "gnowee2_legacy"
+  },
+  "search": {
+    "record": "pdx_model"
+  },
+  "log_level": "debug",
+  "port": 3000,
+  "postgres": {
+    "connectionString": "postgres://repositive:repositive@postgres:5432/search2",
+    "max": 10
+  },
+  "jwt":{
+    "secret": "super_secret_jam"
+  },
+  "arango": {
+    "url": "http://arango:8529"
+  }
+}

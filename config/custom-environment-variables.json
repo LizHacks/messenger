@@ -1,0 +1,28 @@
+{
+  "base_path": "BASE_PATH",
+  "iris_legacy" : {
+    "uri": "RABBIT_URI",
+    "exchange": "RABBIT_EXCHANGE",
+    "namespace": "IRIS_LEGACY_NAMESPACE"
+  },
+  "iris" : {
+    "uri": "RABBIT_URI",
+    "exchange": "RABBIT_EXCHANGE",
+    "namespace": "IRIS_NAMESPACE"
+  },
+  "elastic": {
+    "uri": "ELASTIC_URI"
+  },
+  "search": {
+    "record": "SEARCH_RECORD"
+  },
+  "log_level": "LOG_LEVEL",
+  "port": "HTTP_PORT",
+  "postgres": {
+    "connectionString": "DB_URI",
+    "max": "DB_MAX_CONNECTIONS"
+  },
+  "jwt": {
+    "secret": "JWT_SECRET"
+  }
+}

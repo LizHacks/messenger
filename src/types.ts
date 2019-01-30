@@ -12,6 +12,7 @@ export interface OrganisationDetail {
 export interface UserDetail {
   name: string; // Comes from the accounts domain
   user_id: string; // Comes from the organisations domain
+  organisation?: OrganisationDetail;
   organisation_id: string;
   avatar_url?: string;
 }
@@ -24,7 +25,7 @@ export interface MessageDetail { // Aggregated by message sent events
 }
 
 export interface Conversation {
-  active: boolean;
+  active?: boolean;
   conversation_id: string; // UUID used to aggregate conversation threads
   topic: string;
   members: UserDetail[]; // Get other members filter(user => user.user_id != me.user_id)

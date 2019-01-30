@@ -18,8 +18,14 @@ import { UserDetail, MessageDetail, Conversation } from '../types';
 const ChatMessage = ({message, is_me}: {message: MessageDetail, is_me: boolean}) => (
   <Box>
     <Media>
-       <Media.Item renderAs="figure" position="left" className="is-hidden-mobile">
-          <img height="64" width="64" alt="64x64" src="http://bulma.io/images/placeholders/128x128.png" />
+       <Media.Item className="is-hidden-mobile">
+          <img
+            height="128"
+            width="128"
+            style={{margin: "0px", borderRadius: "100%"}}
+            alt="64x64"
+            src="http://bulma.io/images/placeholders/128x128.png"
+          />
         </Media.Item>
         <Media.Item>
           <Content>
@@ -44,7 +50,7 @@ const ChatMessageEditor = () => (
               New Message to <strong>Bobby Beans</strong>
             </p>
             <p>
-              <Form.Textarea placeholder = "Write your message here..." />
+              <Form.Textarea placeholder = "Write your message here..."  onChange  = { () => undefined }/>
             </p>
           </Content>
         <Level>
@@ -70,7 +76,7 @@ const RenderMessages = ({conversation, me}: {conversation: Conversation, me: Use
 // TODO: This need to accept some kind of user_chat object or something idk
 export default ({conversation, me}: {conversation: Conversation, me: UserDetail}) => (
   <Section className="is-marginless">
-    <Hero color='none'>
+    <Hero color='light'>
       <Hero.Body>
         <Heading>{conversation.topic || "New Conversation"}</Heading>
         <Heading subtitle>

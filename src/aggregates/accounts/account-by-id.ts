@@ -23,12 +23,11 @@ import {
   AccountUpdated,
   AccountInviteToOrgAccepted,
 } from '../../events';
-import { ProfileDetail } from '../../openapi';
 
 const onAccountCreated = async (
-  _acc: Option<ProfileDetail>,
+  _acc: Option<any>,
   event: Event<AccountCreated, EventContext<any>>,
-): Promise<Option<ProfileDetail>> => {
+): Promise<Option<any>> => {
   const { name, email, user_id } = event.data;
   const { time: created_at } = event.context;
 
@@ -45,9 +44,9 @@ const onAccountCreated = async (
 // AccountUpdated is only a delta, so some fields can be undefined. This handler needs some magic
 // to only add defined values to the reduction.
 const onAccountUpdated = async (
-  acc: Option<ProfileDetail>,
+  acc: Option<any>,
   event: Event<AccountUpdated, EventContext<any>>,
-): Promise<Option<ProfileDetail>> => {
+): Promise<Option<any>> => {
   const {
     name,
     bio,
@@ -67,8 +66,8 @@ const onAccountUpdated = async (
     work_role,
   };
 
-  // Remove undefined values
-  const populatedFields = R.reject(R.isNil, fields);
+  // Remove undefined values XXX as any
+  const populatedFields = R.reject(R.isNil, fields as any);
 
   return Some({
     ...acc.get(),
@@ -78,9 +77,9 @@ const onAccountUpdated = async (
 };
 
 const onAvatarEdited = async (
-  acc: Option<ProfileDetail>,
+  acc: Option<any>,
   event: Event<AvatarEdited, EventContext<any>>,
-): Promise<Option<ProfileDetail>> => {
+): Promise<Option<any>> => {
   const { avatar } = event.data;
 
   return Some({
@@ -90,9 +89,9 @@ const onAvatarEdited = async (
 };
 
 const onAccountInviteToOrgAccepted = async (
-  acc: Option<ProfileDetail>,
+  acc: Option<any>,
   event: Event<AccountInviteToOrgAccepted, EventContext<any>>,
-): Promise<Option<ProfileDetail>> => {
+): Promise<Option<any>> => {
   const { organisation_id, organisation_type } = event.data;
 
   return acc.map((profile) => {
@@ -105,9 +104,9 @@ const onAccountInviteToOrgAccepted = async (
 };
 
 const onSuperAdminGranted = async (
-  acc: Option<ProfileDetail>,
+  acc: Option<any>,
   _event: Event<SuperAdminGranted, EventContext<any>>,
-): Promise<Option<ProfileDetail>> => {
+): Promise<Option<any>> => {
   return acc.map((profile) => {
     return {
       ...profile,
@@ -117,9 +116,9 @@ const onSuperAdminGranted = async (
 };
 
 const onSuperAdminRevoked = async (
-  acc: Option<ProfileDetail>,
+  acc: Option<any>,
   _event: Event<SuperAdminRevoked, EventContext<any>>,
-): Promise<Option<ProfileDetail>> => {
+): Promise<Option<any>> => {
   return acc.map((profile) => {
     return {
       ...profile,
@@ -130,7 +129,7 @@ const onSuperAdminRevoked = async (
 
 export function prepareAccountById(
   store: EventStore<PgQuery>,
-): Aggregate<[AccountId], ProfileDetail> {
+): Aggregate<[AccountId], any> {
   return store.createAggregate(
     'AccountById',
     {
