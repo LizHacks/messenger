@@ -66,8 +66,17 @@ const onAccountUpdated = async (
     work_role,
   };
 
-  // Remove undefined values XXX as any
-  const populatedFields = R.reject(R.isNil, fields as any);
+  // Remove undefined values
+  const populatedFields = (Object as any).entries(fields)
+    .filter(([key, value]: [string, any]) => !R.isNil(value))
+    .reduce((a: any, [key, value]: [string, any]) => {
+      return {
+        ...a,
+        [key]: value,
+      };
+    }, {});
+
+  console.log({onAccountUpdated: acc});
 
   return Some({
     ...acc.get(),

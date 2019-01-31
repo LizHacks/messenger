@@ -6,23 +6,31 @@ import {
 } from '../../events';
 import { Option, Some } from 'funfix';
 
+export interface Message {
+  thread_id: string;
+  message: string;
+  from: string;
+  time: string;
+}
+
 async function onMessageSent(
-  acc: Option<any[]>,
+  acc: Option<Message[]>,
   event: Event<MessageSent, any>,
-): Promise<Option<any[]>> {
+): Promise<Option<Message[]>> {
   return Some([
     ...acc.getOrElse([]),
     {
+      thread_id: event.data.thread_id,
       message: event.data.message_text,
-      to: event.data.to,
       from: event.data.from,
+      time: event.context.time,
     },
   ]);
 }
 
 export function prepareMessagesByThread(
   store: EventStore<PgQuery>,
-): Aggregate<[string], any[]> {
+): Aggregate<[string], Message[]> {
   return store.createAggregate(
     'MessagesInThread',
     {

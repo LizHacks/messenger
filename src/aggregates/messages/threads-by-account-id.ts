@@ -52,7 +52,7 @@ export function prepareThreadyByAccountId(
     {
       text: `
       -- Threads by user id
-      select * from events where data->>'members' @> $1
+      select * from events where (data->'members') ? $1
       `,
     },
     [
