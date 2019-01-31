@@ -1,14 +1,19 @@
 import * as Koa from 'koa';
 import * as mount from 'koa-mount';
+import * as parseBody from 'co-body';
 import * as jwt from 'jsonwebtoken';
 import * as config from 'config';
 import { Right, Option } from 'funfix';
+import logger from '../../utils/logger';
 import { Pool } from 'pg';
 import {
   createPgStoreAdapter,
   createPgCacheAdapter,
   createAQMPEmitterAdapter,
   EventStore,
+  Event,
+  EventData,
+  EventContext,
 } from '@repositive/event-store';
 import {
   OrganisationCreated,
@@ -19,6 +24,7 @@ import {
 
 // import handlers
 import getConversationsHandler from './operations/get_conversations';
+import sendMessage from './operations/send_message';
 
 // import aggreates
 import { prepareThreadyByAccountId } from '../../aggregates/messages/threads-by-account-id';
@@ -43,18 +49,27 @@ const init = (): InternalState => {
   // subscribe to some shit
   // return a 'state' object to pass around?
   const pg_pool = new Pool(config.get('postgres'));
-  const emitter = createAQMPEmitterAdapter(config.get('iris'), console);
-  const storeAdapter = createPgStoreAdapter(pg_pool, console);
-  const cache = createPgCacheAdapter(pg_pool, console);
+  const emitter = createAQMPEmitterAdapter(config.get('iris'), logger);
+  const storeAdapter = createPgStoreAdapter(pg_pool, logger);
+  const cache = createPgCacheAdapter(pg_pool, logger);
 
-  const store = new EventStore(storeAdapter, {emitter, cache, logger: console});
+  const store = new EventStore(storeAdapter, {emitter, cache, logger});
 
-  const store_event = async (ev: any) => Right(undefined);
+  async function saveEvent(event: Event<EventData, EventContext<any>>): Promise<any> {
+    // Handle old-style accounts events
+    const context = event.context || { time: (event as any).time, subject: {} };
 
-  store.listen<OrganisationCreated>('organisations', 'OrganisationCreated', store_event);
-  store.listen<OrganisationUpdated>('organisations', 'OrganisationUpdated', store_event);
-  store.listen<AccountCreated>('accounts', 'AccountCreated', store_event);
-  store.listen<AccountUpdated>('accounts', 'AccountUpdated', store_event);
+    const evt = { ...event, context };
+
+    logger.trace('saveEvent', { evt });
+
+    return store.save(evt);
+  }
+
+  store.listen<OrganisationCreated>('organisations', 'OrganisationCreated', saveEvent);
+  store.listen<OrganisationUpdated>('organisations', 'OrganisationUpdated', saveEvent);
+  store.listen<AccountCreated>('accounts', 'AccountCreated', saveEvent);
+ //  store.listen<AccountUpdated>('accounts', 'AccountUpdated', saveEvent);
 
   const OrganisationById = () => undefined;
 
@@ -77,6 +92,10 @@ const global_state: InternalState = init();
 
 // Inject global state to each request
 api.use(async (ctx: any, next: any) => {
+  ctx.request.body = await parseBody.json(ctx.req);
+  await next();
+});
+api.use(async (ctx: any, next: any) => {
   ctx.state.global = global_state;
   await next();
 });
@@ -90,15 +109,11 @@ api.use(async (ctx: any, next: any) => {
     await next();
   } catch (e) {
     console.log(e);
-    ctx.throw(401, "UNAUTHORIZED numberwang");
+    ctx.throw(401, "UNAUTHORIZED");
   }
 });
 
 api.use(mount('/get-conversations', getConversationsHandler));
 
-api.use(mount('/send-message', async (ctx: any) => {
-  // TODO: Use io-ts to validate the type of the payload for this endpoint
-  ctx.body = "send-message" + ctx.state.auth.name;
-}));
-
+api.use(mount('/send-message', sendMessage));
 export default api;
