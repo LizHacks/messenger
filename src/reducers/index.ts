@@ -18,6 +18,8 @@ export interface Session {
 
 export interface ConversationsState {
     is_loading: boolean;
+    is_message_sending: boolean;
+    is_message_send_error: boolean;
     is_error: boolean;
     active_id: string;
     data: Conversation[];

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import classNames from 'classnames';
 import {
   Form,
   Container,
@@ -44,8 +45,8 @@ const ChatMessage = ({message, is_me}: {message: MessageDetail, is_me: boolean})
   </Box>
 );
 const ChatMessageEditor = (
-  {conversation, me, onSendMessage}:
-  {conversation: Conversation, me: UserDetail, onSendMessage: any},
+  {conversation, me, onSendMessage, isMessageSending, isSendingError}:
+  {conversation: Conversation, me: UserDetail, onSendMessage: any, isMessageSending: boolean, isSendingError: boolean},
 ) => (
   <Box>
     <Media>
@@ -55,12 +56,23 @@ const ChatMessageEditor = (
               New message to <strong><OtherPeopleInThread conversation={conversation} me={me} /></strong>
             </p>
             <p>
-              <textarea name="message_input" className="textarea is-primary"/>
+              <textarea
+                name="message_input"
+                className={classNames("textarea", {'is-loading': isMessageSending})}
+              />
             </p>
           </Content>
         <Level>
           <Level.Side>
-          <Button className="is-primary" onClick={onSendMessage}>Send</Button>
+          <Button
+            className={classNames(
+              {'is-primary': !isSendingError},
+              {'is-loading': isMessageSending},
+              {'is-danger' : isSendingError},
+            )}
+            onClick={onSendMessage}>
+              {isSendingError ? "Could not send message, click to retry" : "Send message" }
+            </Button>
           </Level.Side>
         </Level>
         </Media.Item>
@@ -80,8 +92,8 @@ const RenderMessages = ({conversation, me}: {conversation: Conversation, me: Use
 
 // TODO: This need to accept some kind of user_chat object or something idk
 export default (
-  {conversation, me, onSendMessage}:
-  {conversation: Conversation, me: UserDetail, onSendMessage: any},
+  {conversation, me, onSendMessage, isMessageSending, isSendingError}:
+  {conversation: Conversation, me: UserDetail, onSendMessage: any, isMessageSending: boolean, isSendingError: boolean},
 ) => (
   <Section className="is-marginless">
     <Hero color='light'>
@@ -97,7 +109,13 @@ export default (
           <RenderMessages conversation={conversation} me={me}/>
         </Container>
         <Container style={{marginTop: "15px"}}>
-          <ChatMessageEditor conversation={conversation} me={me} onSendMessage={onSendMessage}/>
+          <ChatMessageEditor
+            conversation={conversation}
+            me={me}
+            onSendMessage={onSendMessage}
+            isMessageSending={isMessageSending}
+            isSendingError={isSendingError}
+          />
         </Container>
       </Hero.Body>
       <Hero.Footer>

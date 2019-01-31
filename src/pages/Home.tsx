@@ -58,9 +58,11 @@ class Home extends React.PureComponent<any, any> {
                 me={{user_id: this.props.user_id}as any}
                 onSendMessage={() => this.props.dispatch(
                   send_message(this.props.active_conversation, {user_id: this.props.user_id}as any))}
+                isMessageSending={this.props.is_message_sending}
+                isSendingError={this.props.is_message_send_error}
               />
             ) : (<Section>
-                <Hero color="light">
+                <Hero color="danger">
                   <Hero.Body>
                     <Heading>You don't have any conversations.</Heading>
                     <Heading subtitle>Don't be so fucking quiet you nerd</Heading>
@@ -77,5 +79,11 @@ class Home extends React.PureComponent<any, any> {
 
 export default connect(
   (s: AppState) => (
-    {conversations: s.conversations, active_conversation: getActiveConversation(s), user_id: s.me.user_id }),
+    {
+      conversations: s.conversations,
+      active_conversation: getActiveConversation(s),
+      user_id: s.me.user_id,
+      is_message_sending: s.conversations.is_message_sending,
+      is_message_send_error: s.conversations.is_message_send_error,
+    }),
 )(Home);

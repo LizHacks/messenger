@@ -2,6 +2,7 @@ import { ConversationsState } from '.';
 
 import {SWITCH_CHAT } from '../actions/conversations';
 import {SEND_MESSAGE_BEGIN } from '../actions/conversations';
+import {SEND_MESSAGE_FAILURE } from '../actions/conversations';
 import {SEND_MESSAGE_SUCCESS } from '../actions/conversations';
 import {POLL_MESSAGES } from '../actions/conversations';
 import {POLL_MESSAGES_SUCCESS } from '../actions/conversations';
@@ -37,16 +38,18 @@ const example_conversation_2 = {
 
 const conversations = [
   // TODO: Get this list from redux
-] as any;
+] as any[];
 
 export const defaultState: ConversationsState = {
     is_loading: false,
+    is_message_sending: false,
+    is_message_send_error: false,
     is_error: false,
     active_id: '',
     data: conversations,
 };
 
-export default function auth(state = defaultState, action = {} as any) {
+export default function Conversations(state = defaultState, action = {} as any) {
   switch (action.type) {
     case SWITCH_CHAT:
       const { active_id } = action;
@@ -55,9 +58,24 @@ export default function auth(state = defaultState, action = {} as any) {
         active_id,
       };
     case SEND_MESSAGE_BEGIN:
-      return state;
+      return {
+        ...state,
+        is_message_sending: true,
+        is_message_send_error: false,
+      };
     case SEND_MESSAGE_SUCCESS:
-      return state;
+      return {
+        ...state,
+        is_message_sending: false,
+        is_error: false,
+      };
+    case SEND_MESSAGE_FAILURE:
+      return {
+        ...state,
+        is_message_sending: false,
+        is_message_send_error: true,
+        is_error: true,
+      };
     case POLL_MESSAGES:
       return state;
     case POLL_MESSAGES_SUCCESS:
