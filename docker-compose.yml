@@ -1,7 +1,7 @@
 version: '3'
 services:
-  app:
-    command: /bin/sh -c "npm run start:dev"
+  messenger:
+    command: /bin/sh -c "npm run build:dev && npm run start:dev"
     image: node:10
     working_dir: /opt
     ports:
