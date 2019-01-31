@@ -14,7 +14,6 @@ export default async (ctx: any) => {
 };
 
 const get_conversations = async (user_id: string, state: InternalState): Promise<Conversation[]> => {
-  console.log({user_id});
   const user_threads = (await state.aggregates.ThreadyByUserId(user_id))
     .map((obj: any) => (Object as any).values(obj))
     .getOrElse([]);

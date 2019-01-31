@@ -20,6 +20,7 @@ import {
   OrganisationUpdated,
   AccountCreated,
   AccountUpdated,
+  AvatarEdited,
 } from '../../events';
 
 // import handlers
@@ -69,6 +70,8 @@ const init = (): InternalState => {
   store.listen<OrganisationCreated>('organisations', 'OrganisationCreated', saveEvent);
   store.listen<OrganisationUpdated>('organisations', 'OrganisationUpdated', saveEvent);
   store.listen<AccountCreated>('accounts', 'AccountCreated', saveEvent);
+  store.listen<AvatarEdited>('accounts', 'AvatarEdited', saveEvent);
+  // For some reason this breaks the frontend
  //  store.listen<AccountUpdated>('accounts', 'AccountUpdated', saveEvent);
 
   const OrganisationById = () => undefined;
@@ -106,10 +109,11 @@ api.use(async (ctx: any, next: any) => {
   try {
     const verified = jwt.verify(auth_token.get().split(' ')[1], "super_secret_jam");
     ctx.state.auth = verified;
-    await next();
   } catch (e) {
     console.log(e);
     ctx.throw(401, "UNAUTHORIZED");
+  } finally {
+    await next();
   }
 });
 
