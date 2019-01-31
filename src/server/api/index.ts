@@ -26,6 +26,7 @@ import {
 // import handlers
 import getConversationsHandler from './operations/get_conversations';
 import sendMessage from './operations/send_message';
+import newThread from './operations/new_thread';
 
 // import aggreates
 import { prepareThreadyByAccountId } from '../../aggregates/messages/threads-by-account-id';
@@ -109,15 +110,15 @@ api.use(async (ctx: any, next: any) => {
   try {
     const verified = jwt.verify(auth_token.get().split(' ')[1], "super_secret_jam");
     ctx.state.auth = verified;
+    await next();
   } catch (e) {
     console.log(e);
     ctx.throw(401, "UNAUTHORIZED");
-  } finally {
-    await next();
   }
 });
 
 api.use(mount('/get-conversations', getConversationsHandler));
-
 api.use(mount('/send-message', sendMessage));
+api.use(mount('/new-thread', newThread));
+
 export default api;

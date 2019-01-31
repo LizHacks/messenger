@@ -17,7 +17,7 @@ export type CreateThreadCmd = T.TypeOf<typeof payloadRuntime>;
 
 export default async (ctx: any) => {
   try {
-    payloadRuntime.decode(ctx.request.body)
+    await payloadRuntime.decode(ctx.request.body)
       .map(async (payload) => {
         ctx.body = await create_thread(ctx.request.body, ctx.state);
       }).getOrElseL(() => ctx.throw(400, "INVALID PAYLOAD"));
@@ -30,7 +30,7 @@ const create_thread = async (
   payload: CreateThreadCmd,
   {global: state, auth}: {global: InternalState, auth: any},
 ) => {
-  console.log(payload);
+  console.log("topic", payload);
 
   const event_payload = {
     topic: payload.topic,
