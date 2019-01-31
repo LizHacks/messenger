@@ -18,6 +18,7 @@
   "private": true,
   "dependencies": {
     "@repositive/event-store": "^0.1.1",
+    "@types/classnames": "^2.2.7",
     "@types/co-body": "^0.0.3",
     "ava": "^1.2.0",
     "ava-ts": "^0.25.2",
