@@ -13,24 +13,26 @@ import {
   Section,
   Tag,
 } from 'react-bulma-components';
+import MomentWrapper from './MomentWrapper';
+import OtherPeopleInThread from './OtherPeopleInThread';
 import { UserDetail, MessageDetail, Conversation } from '../types';
 
 const ChatMessage = ({message, is_me}: {message: MessageDetail, is_me: boolean}) => (
   <Box>
     <Media>
-       <Media.Item className="is-hidden-mobile">
+       <div className="is-hidden-mobile media-left">
           <img
-            height="128"
-            width="128"
+            height="64"
+            width="64"
             style={{margin: "0px", borderRadius: "100%"}}
             alt="64x64"
             src="http://bulma.io/images/placeholders/128x128.png"
           />
-        </Media.Item>
-        <Media.Item>
+        </div>
+        <Media.Item className="media-content">
           <Content>
             <p>
-              <strong>{message.from.name}</strong> - {message.time}
+              <strong>{message.from.name}</strong> - <MomentWrapper time={message.time}/>
   {is_me ? <Tag style={{marginLeft: "15px"}} color="success">You</Tag> : ""}
             </p>
             <p>
@@ -41,21 +43,24 @@ const ChatMessage = ({message, is_me}: {message: MessageDetail, is_me: boolean})
     </Media>
   </Box>
 );
-const ChatMessageEditor = () => (
+const ChatMessageEditor = (
+  {conversation, me, onSendMessage}:
+  {conversation: Conversation, me: UserDetail, onSendMessage: any},
+) => (
   <Box>
     <Media>
         <Media.Item>
           <Content>
             <p>
-              New Message to <strong>Bobby Beans</strong>
+              New message to <strong><OtherPeopleInThread conversation={conversation} me={me} /></strong>
             </p>
             <p>
-              <Form.Textarea placeholder = "Write your message here..."  onChange  = { () => undefined }/>
+              <textarea name="message_input" className="textarea is-primary"/>
             </p>
           </Content>
         <Level>
           <Level.Side>
-          <Button className="is-primary">Send</Button>
+          <Button className="is-primary" onClick={onSendMessage}>Send</Button>
           </Level.Side>
         </Level>
         </Media.Item>
@@ -74,20 +79,25 @@ const RenderMessages = ({conversation, me}: {conversation: Conversation, me: Use
 };
 
 // TODO: This need to accept some kind of user_chat object or something idk
-export default ({conversation, me}: {conversation: Conversation, me: UserDetail}) => (
+export default (
+  {conversation, me, onSendMessage}:
+  {conversation: Conversation, me: UserDetail, onSendMessage: any},
+) => (
   <Section className="is-marginless">
     <Hero color='light'>
       <Hero.Body>
         <Heading>{conversation.topic || "New Conversation"}</Heading>
         <Heading subtitle>
-          Conversation with <strong>Other Person</strong> from <strong>Other Person's Org</strong>
-          <Tag color="primary" style={{marginLeft: "15px"}}>Vendor</Tag>
+          Conversation with&nbsp;
+          <strong>
+            <OtherPeopleInThread conversation= {conversation} me={me}/>
+          </strong>.
         </Heading>
         <Container>
           <RenderMessages conversation={conversation} me={me}/>
         </Container>
         <Container style={{marginTop: "15px"}}>
-          <ChatMessageEditor />
+          <ChatMessageEditor conversation={conversation} me={me} onSendMessage={onSendMessage}/>
         </Container>
       </Hero.Body>
       <Hero.Footer>

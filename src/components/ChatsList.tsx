@@ -16,7 +16,7 @@ const ChatListItem = (
         active = {is_active}
         onClick={() => switchAction(conversation.conversation_id)}
       >
-        {conversation.topic}
+        {conversation.topic || ''}
       </Menu.List.Item>
     </Heading>
 );
