@@ -2,10 +2,12 @@ import { combineReducers } from 'redux';
 import { Conversation, UserDetail } from '../types';
 
 import auth from './auth';
+import me from './me';
 import conversations from './conversations';
 
 export default combineReducers({
   auth,
+  me,
   conversations,
 });
 
@@ -29,4 +31,5 @@ interface SessionState {
 export interface AppState {
   conversations: ConversationsState;
   session: SessionState;
+  me: {user_id: string};
 }

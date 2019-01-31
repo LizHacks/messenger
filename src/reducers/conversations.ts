@@ -13,16 +13,16 @@ const example_user = {
 };
 const example_message = {
   from: example_user,
-  to: example_user,
   time: "5 mintues ago",
   message: `This is an example message with a little bit of content and some other stuff
 and it's multiline and some other shit as well there still more crap this should show how it
   works well with longer messages, regardless of their length and girth`,
+  thread_id: "somethread",
 };
 
 const example_conversation_1 = {
   active: true,
-  conversation_id: "some_uuid",
+  conversation_id: "somet_junk_some_uuid",
   topic: "Some conversation topic about models or cancer or something",
   members: [example_user, example_user],
   messages: [example_message, example_message],
@@ -37,9 +37,7 @@ const example_conversation_2 = {
 
 const conversations = [
   // TODO: Get this list from redux
-  example_conversation_1,
-  example_conversation_2,
-];
+] as any;
 
 export const defaultState: ConversationsState = {
     is_loading: false,
@@ -63,7 +61,10 @@ export default function auth(state = defaultState, action = {} as any) {
     case POLL_MESSAGES:
       return state;
     case POLL_MESSAGES_SUCCESS:
-      return state;
+      return {
+        ...state,
+        data: action.conversations,
+      };
     default:
       return state;
   }
