@@ -241,7 +241,6 @@ export interface MessageSent extends EventData {
   event_type: 'MessageSent';
   event_namespace: 'messaging';
   from: AccountId;
-  to: AccountId;
   thread_id: ThreadId;
   message_text: string;
 }

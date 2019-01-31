@@ -18,8 +18,8 @@ export interface UserDetail {
 }
 
 export interface MessageDetail { // Aggregated by message sent events
-  from: UserDetail; // user_id
-  to: UserDetail; // user_id
+  from: UserDetail;
+  thread_id: string;
   message: string;
   time: string; // datetime
 }
