@@ -18,16 +18,19 @@ import MomentWrapper from './MomentWrapper';
 import OtherPeopleInThread from './OtherPeopleInThread';
 import { UserDetail, MessageDetail, Conversation } from '../types';
 
+// tslint:disable-next-line
+const defaultAvatar = require('../../assets/default-pic.png');
+
 const ChatMessage = ({message, is_me}: {message: MessageDetail, is_me: boolean}) => (
   <Box>
     <Media>
        <div className="is-hidden-mobile media-left">
           <img
-            height="64"
-            width="64"
+            height="45"
+            width="45"
             style={{margin: "0px", borderRadius: "100%"}}
             alt="64x64"
-            src="http://bulma.io/images/placeholders/128x128.png"
+            src={message.from.avatar || defaultAvatar}
           />
         </div>
         <Media.Item className="media-content">
@@ -59,6 +62,7 @@ const ChatMessageEditor = (
               <textarea
                 name="message_input"
                 className={classNames("textarea", {'is-loading': isMessageSending})}
+                disabled={isSendingError || isMessageSending}
               />
             </p>
           </Content>
