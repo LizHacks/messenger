@@ -66,7 +66,6 @@ export default function Conversations(state = defaultState, action = {} as any) 
     case SEND_MESSAGE_SUCCESS:
       return {
         ...state,
-        is_message_sending: false,
         is_error: false,
       };
     case SEND_MESSAGE_FAILURE:
@@ -77,7 +76,10 @@ export default function Conversations(state = defaultState, action = {} as any) 
         is_error: true,
       };
     case POLL_MESSAGES:
-      return state;
+      return {
+        ...state,
+        is_message_sending: false,
+      };
     case POLL_MESSAGES_SUCCESS:
       return {
         ...state,
