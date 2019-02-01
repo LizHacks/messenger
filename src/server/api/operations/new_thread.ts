@@ -15,6 +15,11 @@ const payloadRuntime = T.type({
 
 export type CreateThreadCmd = T.TypeOf<typeof payloadRuntime>;
 
+export interface CreateThreadResponse {
+  ok: boolean;
+  thread_id: string;
+}
+
 export default async (ctx: any) => {
   try {
     await payloadRuntime.decode(ctx.request.body)
@@ -32,10 +37,12 @@ const create_thread = async (
 ) => {
   console.log("topic", payload);
 
+  const thread_id = v4();
+
   const event_payload = {
     topic: payload.topic,
     members: [auth.user_id, ...payload.members],
-    thread_id: v4(),
+    thread_id,
   };
 
   await state.store.save(
@@ -46,5 +53,5 @@ const create_thread = async (
     ),
   );
 
-  return JSON.stringify({ok: true});
+  return JSON.stringify({ok: true, thread_id});
 };
