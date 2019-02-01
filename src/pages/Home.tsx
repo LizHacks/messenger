@@ -7,6 +7,7 @@ import {UserDetail, Conversation, MessageDetail } from '../types';
 
 import { switch_chat, poll_messages, send_message } from '../actions/conversations';
 import { load_from_localstorage } from '../actions/me';
+import { hide_new_thread_form, show_new_thread_form, create_new_thread} from '../actions/threads';
 
 import ChatsList from '../components/ChatsList';
 import ChatViewer from '../components/ChatViewer';
@@ -26,7 +27,6 @@ const example_user = {
 
 class Home extends React.PureComponent<any, any> {
   public componentDidMount = () => {
-    console.log("POLLING!!");
     setInterval(() => this.props.dispatch(poll_messages()), 1000);
     this.props.dispatch(load_from_localstorage());
   }
@@ -49,6 +49,10 @@ class Home extends React.PureComponent<any, any> {
               switchAction={(id: string) => this.props.dispatch(switch_chat(id))}
               conversations={this.props.conversations.data}
               active_id={(this.props.active_conversation || {}).conversation_id || ''}
+              threads={this.props.threads}
+              hideNewThreadAction={() => this.props.dispatch(hide_new_thread_form())}
+              showNewThreadAction={() => this.props.dispatch(show_new_thread_form())}
+              createNewThreadAction={() => this.props.dispatch(create_new_thread())}
             />
           </Columns.Column>
           <Columns.Column className="is-three-quarters">
@@ -65,7 +69,9 @@ class Home extends React.PureComponent<any, any> {
                 <Hero color="danger">
                   <Hero.Body>
                     <Heading>You don't have any conversations.</Heading>
-                    <Heading subtitle>Don't be so fucking quiet you nerd</Heading>
+                    <Heading subtitle>
+                      You can start a new conversation with the <strong>button on the left</strong>&nbsp;
+                      or through Repositive CMP</Heading>
                   </Hero.Body>
                 </Hero>
                 </Section> )
@@ -85,5 +91,6 @@ export default connect(
       user_id: s.me.user_id,
       is_message_sending: s.conversations.is_message_sending,
       is_message_send_error: s.conversations.is_message_send_error,
+      threads: s.threads,
     }),
 )(Home);
