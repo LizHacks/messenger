@@ -14,7 +14,7 @@ export interface UserDetail {
   user_id: string; // Comes from the organisations domain
   organisation?: OrganisationDetail;
   organisation_id: string;
-  avatar_url?: string;
+  avatar?: string;
 }
 
 export interface MessageDetail { // Aggregated by message sent events
