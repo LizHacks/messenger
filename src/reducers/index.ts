@@ -4,11 +4,13 @@ import { Conversation, UserDetail } from '../types';
 import auth from './auth';
 import me from './me';
 import conversations from './conversations';
+import threads from './threads';
 
 export default combineReducers({
   auth,
   me,
   conversations,
+  threads,
 });
 
 export interface Session {
@@ -27,11 +29,15 @@ export interface ConversationsState {
 
 interface SessionState {
   session: Session;
+}
 
+export interface ThreadsState {
+  new_thread_editor_visible: boolean;
 }
 
 export interface AppState {
   conversations: ConversationsState;
   session: SessionState;
   me: {user_id: string};
+  threads: ThreadsState;
 }
