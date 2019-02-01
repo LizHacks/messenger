@@ -2,6 +2,9 @@ import * as React from 'react';
 import { Conversation } from '../types';
 import { Level, Button, Section, Menu, Box, Heading } from 'react-bulma-components';
 
+import NewThread from './NewThread';
+import { ThreadsState } from '../reducers';
+
 export interface ChatListing {
   name: string;
   topic: string;
@@ -23,8 +26,24 @@ const ChatListItem = (
 
 // This should come from the state (somehow)
 export default (
-  {conversations, switchAction, active_id}:
-  { conversations: Conversation[], active_id: string, switchAction: any}) => (
+  {
+    conversations,
+    switchAction,
+    active_id,
+    threads,
+    showNewThreadAction,
+    hideNewThreadAction,
+    createNewThreadAction,
+  }:
+  {
+    conversations: Conversation[],
+    active_id: string,
+    switchAction: any,
+    threads: ThreadsState,
+    showNewThreadAction: any,
+    hideNewThreadAction: any,
+    createNewThreadAction: any,
+  }) => (
   <Section>
     <Menu>
       <Menu.List title="Conversations">
@@ -39,11 +58,20 @@ export default (
       </Menu.List>
     </Menu>
     <Section>
-      <Level>
-        <Level.Item>
-          <Button fullwidth className="is-outlined is-primary" >New Chat</Button>
-        </Level.Item>
-      </Level>
+    { !threads.new_thread_editor_visible ?
+      (
+        <Level>
+          <Level.Item>
+            <Button fullwidth
+              className="is-outlined is-primary"
+              onClick={showNewThreadAction}
+            >New Chat</Button>
+          </Level.Item>
+        </Level>
+      ) : (
+        <NewThread hideNewThreadAction={hideNewThreadAction} createNewThreadAction={createNewThreadAction}/>
+      )
+    }
     </Section>
   </Section>
 );
