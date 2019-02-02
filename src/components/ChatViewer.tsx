@@ -48,8 +48,24 @@ const ChatMessage = ({message, is_me}: {message: MessageDetail, is_me: boolean})
   </Box>
 );
 const ChatMessageEditor = (
-  {conversation, me, onSendMessage, isMessageSending, isSendingError}:
-  {conversation: Conversation, me: UserDetail, onSendMessage: any, isMessageSending: boolean, isSendingError: boolean},
+  {
+    conversation,
+    me,
+    onSendMessage,
+    onMessageEdited,
+    isMessageSending,
+    isSendingError,
+    currentMessageText,
+  }:
+  {
+    conversation: Conversation,
+    currentMessageText: string,
+    me: UserDetail,
+    onSendMessage: any,
+    onMessageEdited: any,
+    isMessageSending: boolean,
+    isSendingError: boolean,
+  },
 ) => (
   <Box>
     <Media>
@@ -59,10 +75,12 @@ const ChatMessageEditor = (
               New message to <strong><OtherPeopleInThread conversation={conversation} me={me} /></strong>
             </p>
             <p>
-              <textarea
+              <Form.Textarea
                 name="message_input"
-                className={classNames("textarea", {'is-loading': isMessageSending})}
+                className={classNames({'is-loading': isMessageSending})}
                 disabled={isSendingError || isMessageSending}
+                onChange={onMessageEdited}
+                value={currentMessageText}
               />
             </p>
           </Content>
@@ -96,8 +114,24 @@ const RenderMessages = ({conversation, me}: {conversation: Conversation, me: Use
 
 // TODO: This need to accept some kind of user_chat object or something idk
 export default (
-  {conversation, me, onSendMessage, isMessageSending, isSendingError}:
-  {conversation: Conversation, me: UserDetail, onSendMessage: any, isMessageSending: boolean, isSendingError: boolean},
+  {
+    conversation,
+    me,
+    onSendMessage,
+    onMessageEdited,
+    currentMessageText,
+    isMessageSending,
+    isSendingError,
+  }:
+  {
+    conversation: Conversation,
+    me: UserDetail,
+    onSendMessage: any,
+    onMessageEdited: any,
+    isMessageSending: boolean,
+    currentMessageText: string,
+    isSendingError: boolean,
+  },
 ) => (
   <Section className="is-marginless">
     <Hero color='light'>
@@ -117,8 +151,10 @@ export default (
             conversation={conversation}
             me={me}
             onSendMessage={onSendMessage}
+            onMessageEdited={onMessageEdited}
             isMessageSending={isMessageSending}
             isSendingError={isSendingError}
+            currentMessageText={currentMessageText}
           />
         </Container>
       </Hero.Body>

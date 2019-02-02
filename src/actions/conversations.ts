@@ -5,6 +5,8 @@ export const POLL_MESSAGES = 'POLL_MESSAGES';
 export const POLL_MESSAGES_SUCCESS = 'POLL_MESSAGES_SUCCESS';
 export const SEND_MESSAGE_FAILURE = 'SEND_MESSAGE_FAILURE';
 
+export const MESSAGE_EDITED = 'MESSAGE_EDITED';
+
 import { MessageDetail, Conversation, UserDetail } from '../types';
 import fetch from 'node-fetch';
 
@@ -25,19 +27,17 @@ const get_jwt = () => {
 
 export function send_message(conversation: Conversation, me: UserDetail) {
   // Get a message out of the active conversation/message editor
-  const message_text = (document.getElementsByName("message_input")[0] as any).value;
-
-  if (message_text.length === 0) {
-    return {type: 'MESSAGE_SEND_CANCELLED'};
-  }
-  const message_payload = {
-    message_text,
-    from: me.user_id,
-    thread_id: conversation.conversation_id,
-  };
-  // Start the process of sending a message
-  console.log(get_jwt());
   return (dispatch: any, getState: any) => {
+    const message_text = getState().conversations.message_to_send;
+
+    if (message_text.length === 0) {
+      return {type: 'MESSAGE_SEND_CANCELLED'};
+    }
+    const message_payload = {
+      message_text,
+      from: me.user_id,
+      thread_id: conversation.conversation_id,
+    };
     dispatch({type: SEND_MESSAGE_BEGIN, message_payload});
     return fetch(
       "/api/send-message",
@@ -75,5 +75,12 @@ export function poll_messages() {
       },
     ).then((res) => res.json())
       .then((conversations) => dispatch({type: POLL_MESSAGES_SUCCESS, conversations}));
+  };
+}
+
+export function message_edited(event: any) {
+  return {
+    type: MESSAGE_EDITED,
+    value: event.target.value,
   };
 }
