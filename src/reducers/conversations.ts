@@ -1,44 +1,14 @@
 import { ConversationsState } from '.';
 
-import {SWITCH_CHAT } from '../actions/conversations';
-import {SEND_MESSAGE_BEGIN } from '../actions/conversations';
-import {SEND_MESSAGE_FAILURE } from '../actions/conversations';
-import {SEND_MESSAGE_SUCCESS } from '../actions/conversations';
-import {POLL_MESSAGES } from '../actions/conversations';
-import {POLL_MESSAGES_SUCCESS } from '../actions/conversations';
-
-const example_user = {
-  user_id: "some-user-id",
-  name: "Bobby Beans",
-  organisation_id: "some-org-id",
-};
-const example_message = {
-  from: example_user,
-  time: "5 mintues ago",
-  message: `This is an example message with a little bit of content and some other stuff
-and it's multiline and some other shit as well there still more crap this should show how it
-  works well with longer messages, regardless of their length and girth`,
-  thread_id: "somethread",
-};
-
-const example_conversation_1 = {
-  active: true,
-  conversation_id: "somet_junk_some_uuid",
-  topic: "Some conversation topic about models or cancer or something",
-  members: [example_user, example_user],
-  messages: [example_message, example_message],
-};
-const example_conversation_2 = {
-  active: false,
-  conversation_id: "some_other_uuid",
-  topic: "Some conversation topic about models or cancer or something that shouldn't be shown right now",
-  members: [example_user, example_user],
-  messages: [example_message, example_message, example_message],
-};
-
-const conversations = [
-  // TODO: Get this list from redux
-] as any[];
+import {
+  MESSAGE_EDITED,
+  SWITCH_CHAT,
+  SEND_MESSAGE_BEGIN,
+  SEND_MESSAGE_FAILURE,
+  SEND_MESSAGE_SUCCESS,
+  POLL_MESSAGES,
+  POLL_MESSAGES_SUCCESS,
+} from '../actions/conversations';
 
 export const defaultState: ConversationsState = {
     is_loading: false,
@@ -46,7 +16,8 @@ export const defaultState: ConversationsState = {
     is_message_send_error: false,
     is_error: false,
     active_id: '',
-    data: conversations,
+    message_to_send: '',
+    data: [],
 };
 
 export default function Conversations(state = defaultState, action = {} as any) {
@@ -67,6 +38,7 @@ export default function Conversations(state = defaultState, action = {} as any) 
       return {
         ...state,
         is_error: false,
+        message_to_send: '',
       };
     case SEND_MESSAGE_FAILURE:
       return {
@@ -84,6 +56,11 @@ export default function Conversations(state = defaultState, action = {} as any) 
       return {
         ...state,
         data: action.conversations,
+      };
+    case MESSAGE_EDITED:
+      return {
+        ...state,
+        message_to_send: action.value,
       };
     default:
       return state;
