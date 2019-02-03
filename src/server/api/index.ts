@@ -110,10 +110,11 @@ api.use(async (ctx: any, next: any) => {
   try {
     const verified = jwt.verify(auth_token.get().split(' ')[1], "super_secret_jam");
     ctx.state.auth = verified;
-    await next();
   } catch (e) {
     console.log(e);
     ctx.throw(401, "UNAUTHORIZED");
+  } finally {
+    await next();
   }
 });
 

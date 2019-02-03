@@ -25,7 +25,10 @@ export default async (ctx: any) => {
     await payloadRuntime.decode(ctx.request.body)
       .map(async (payload) => {
         ctx.body = await create_thread(ctx.request.body, ctx.state);
-      }).getOrElseL(() => ctx.throw(400, "INVALID PAYLOAD"));
+      }).getOrElseL(async () => {
+        console.log("INVALID PAYLOAD");
+        ctx.throw(400, "INVALID PAYLOAD");
+      });
   } catch (e) {
     ctx.throw(500, "INTERNAL ERROR");
   }
