@@ -11,12 +11,29 @@ export const CREATE_NEW_THREAD_BEGIN = 'CREATE_NEW_THREAD_BEGIN';
 export const CREATE_NEW_THREAD_SUCCESS = 'CREATE_NEW_THREAD_SUCCESS';
 export const CREATE_NEW_THREAD_FAILURE = 'CREATE_NEW_THREAD_FAILURE';
 
+export const EDIT_NEW_THREAD_TOPIC = 'EDIT_NEW_THREAD_TOPIC';
+export const EDIT_NEW_THREAD_MEMBERS = 'EDIT_NEW_THREAD_MEMBERS';
+
 export function show_new_thread_form() {
   return {type: SHOW_NEW_THREAD_FORM};
 }
 
 export function hide_new_thread_form() {
   return {type: HIDE_NEW_THREAD_FORM};
+}
+
+export function edit_new_thread_topic(event: any) {
+  return {
+    type: EDIT_NEW_THREAD_TOPIC,
+    value: event.target.value,
+  };
+}
+
+export function edit_new_thread_members(event: any) {
+  return {
+    type: EDIT_NEW_THREAD_MEMBERS,
+    value: event.target.value,
+  };
 }
 
 const get_jwt = () => {
@@ -26,11 +43,19 @@ const get_jwt = () => {
           || '') as any).authenticated.token;
 };
 
-export function create_new_thread() {
+export function create_new_thread(
+  {
+    new_thread_topic,
+    new_thread_members,
+  }: {
+    new_thread_topic: string,
+    new_thread_members: string,
+  },
+) {
   return (dispatch: any, getState: any) => {
     const api_paylaod: CreateThreadCmd = {
-      topic: "example thread!!",
-      members: [],
+      topic: new_thread_topic,
+      members: [new_thread_members],
     };
     dispatch({type: CREATE_NEW_THREAD_BEGIN});
     fetch(

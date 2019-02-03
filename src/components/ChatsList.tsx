@@ -34,6 +34,8 @@ export default (
     showNewThreadAction,
     hideNewThreadAction,
     createNewThreadAction,
+    edit_thread_topic,
+    edit_thread_members,
   }:
   {
     conversations: Conversation[],
@@ -43,7 +45,10 @@ export default (
     showNewThreadAction: any,
     hideNewThreadAction: any,
     createNewThreadAction: any,
-  }) => (
+    edit_thread_topic: any,
+    edit_thread_members: any,
+  },
+  ) => (
   <Section>
     <Menu>
       <Menu.List title="Conversations">
@@ -69,7 +74,13 @@ export default (
           </Level.Item>
         </Level>
       ) : (
-        <NewThread hideNewThreadAction={hideNewThreadAction} createNewThreadAction={createNewThreadAction}/>
+        <NewThread
+          hideNewThreadAction={hideNewThreadAction}
+          createNewThreadAction={createNewThreadAction}
+          edit_thread_topic={edit_thread_topic}
+          edit_thread_members={edit_thread_members}
+          isButtonEnabled={threads.create_new_thread_button_enabled}
+        />
       )
     }
     </Section>

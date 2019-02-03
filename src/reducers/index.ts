@@ -24,6 +24,7 @@ export interface ConversationsState {
     is_message_send_error: boolean;
     is_error: boolean;
     active_id: string;
+    message_to_send: string;
     data: Conversation[];
 }
 
@@ -33,6 +34,9 @@ interface SessionState {
 
 export interface ThreadsState {
   new_thread_editor_visible: boolean;
+  new_thread_topic: string;
+  new_thread_members: string;
+  create_new_thread_button_enabled: boolean;
 }
 
 export interface AppState {
