@@ -16,7 +16,11 @@ import {
 } from 'react-bulma-components';
 import MomentWrapper from './MomentWrapper';
 import OtherPeopleInThread from './OtherPeopleInThread';
+import { Parser, HtmlRenderer } from 'commonmark';
 import { UserDetail, MessageDetail, Conversation } from '../types';
+
+const markdownParser = new Parser();
+const markdownRenderer = new HtmlRenderer();
 
 // tslint:disable-next-line
 const defaultAvatar = require('../../assets/default-pic.png');
@@ -40,7 +44,9 @@ const ChatMessage = ({message, is_me}: {message: MessageDetail, is_me: boolean})
   {is_me ? <Tag style={{marginLeft: "15px"}} color="success">You</Tag> : ""}
             </p>
             <p>
-              {message.message}
+              <Content
+                dangerouslySetInnerHTML={{__html: markdownRenderer.render(markdownParser.parse(message.message))}}>
+              </Content>
             </p>
           </Content>
         </Media.Item>
